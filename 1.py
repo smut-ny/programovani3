@@ -1,5 +1,8 @@
 # 1) Napište funkci over_zavorky(text), která vrací TRUE, pokud je text správně uzávorkovaný (závorky jsou správně otevřené a zavřené), jinak FALSE
 
+from ssl import VERIFY_X509_STRICT
+
+
 def over_zavorky(string, stack_number):
     seznam_zavorek = list(string)
     stack = stack_number
@@ -38,4 +41,32 @@ def my_flatten(lists):
 # print(
 #     my_flatten(seznamy)
 # )
+
+
+def get_fibo(number):
+
+    if number < 2:
+        return number
+    else:
+        return get_fibo(number - 1) + get_fibo(number - 2)
+
+
+def get_fibo_it(number):
+    range_list = [i for i in range(0, number)]
+    vysledek = []
+    vysledek_lich = 1
+    vysledek_sud = 1
+
+    for i in range_list:
+
+        if i < 2:
+            vysledek.extend([1])
+        else:
+            if i % 2 == 1:
+                vysledek_lich += vysledek_sud
+                vysledek.extend([vysledek_lich])
+            else:
+                vysledek_sud += vysledek_lich
+                vysledek.extend([vysledek_sud])
+    return vysledek
 
