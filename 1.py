@@ -1,8 +1,3 @@
-# 1) Napište funkci over_zavorky(text), která vrací TRUE, pokud je text správně uzávorkovaný (závorky jsou správně otevřené a zavřené), jinak FALSE
-
-from ssl import VERIFY_X509_STRICT
-
-
 def over_zavorky(string, stack_number):
     seznam_zavorek = list(string)
     stack = stack_number
