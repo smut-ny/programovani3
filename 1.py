@@ -16,7 +16,7 @@ def over_zavorky(string, stack_number):
             return False
 
 # print(
-# over_zavorky(")))))))((((((())))", 0)
+# over_zavorky(")(", 0)
 # )
 
 
@@ -32,7 +32,7 @@ def my_flatten(lists):
     return flatten_list
 
 
-# seznamy = [100, 200, 300, [1, 2, 3, [10, 20, 30]]]
+seznamy = [100, 200, 300, [1, 2, 3, [10, [20], 30]]]
 # print(
 #     my_flatten(seznamy)
 # )
@@ -44,6 +44,10 @@ def get_fibo(number):
         return number
     else:
         return get_fibo(number - 1) + get_fibo(number - 2)
+
+print(
+    get_fibo(10)
+)
 
 
 def get_fibo_it(number):
@@ -65,3 +69,6 @@ def get_fibo_it(number):
                 vysledek.extend([vysledek_sud])
     return vysledek
 
+print(
+    get_fibo_it(10)
+)
