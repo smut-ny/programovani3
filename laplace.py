@@ -1,8 +1,15 @@
 # Global functions
 import random
 
+def prettyPrintVector(vector_data):
+    for line in vector_data:
+        print(*line)
+
+# Global vars
+blank_character = "."
+
 # 1. generate map
-def generateMap(x, y, tiles_number):
+def generateMap(x, y, tiles_number, blank_character):
 
     def tilesRandomValueGenerator(random_number_cap, count):
         tiles_list = []
@@ -60,16 +67,45 @@ def generateMap(x, y, tiles_number):
         blank_map = map
         final_map = setValues(random_coords_list, blank_map, values)
 
-        return final_map
+        output = {
+            "map": final_map,
+            "data": {
+                "tile_values": values,
+                "tile_coords": random_coords_list,
+                "info": "Tile coords are zero indexed"
+            }
+        }
+
+        return output
 
 
 
     tiles_values = tilesRandomValueGenerator(10, tiles_number)
-    blank_map = createBlankMap(x, y, ".")
-    map = setValuesToMap(tiles_values, blank_map, x, y, 5)
+    blank_map = createBlankMap(x, y, blank_character)
+    map_output = setValuesToMap(tiles_values, blank_map, x, y, 5)
 
-    return map
+    return map_output
 
-print(
-generateMap(5, 5, 5)
-)
+
+# 2. laplace function
+
+def laplaceSteps(map):
+    map = map["map"]
+
+    def getEmptyValuesCoords(map):
+        coords = []
+        
+        for row in map:
+            for index, value in enumerate(row):
+                if value == blank_character:
+                    coords.append([map.index(row), index])
+
+        return coords
+
+    empty_values_coords = getEmptyValuesCoords(map)
+    
+    return prettyPrintVector(map), empty_values_coords
+
+laplace_map = generateMap(5, 5, 5, blank_character)
+
+print(laplaceSteps(laplace_map))
