@@ -1,8 +1,5 @@
 # Global functions
-def generateRandomNumber(min_range, max_range):
-    import random
-    return random.randint(min_range, max_range)
-
+import random
 
 # 1. generate map
 def generateMap(x, y, tiles_number):
@@ -12,7 +9,7 @@ def generateMap(x, y, tiles_number):
         i = 0
 
         while i < count:
-            tiles_list.append(generateRandomNumber(1, random_number_cap))
+            tiles_list.append(random.randint(1, random_number_cap))
             i += 1
 
         return tiles_list
@@ -25,7 +22,8 @@ def generateMap(x, y, tiles_number):
             row.append(blank_character)
 
         for i in range(y):
-            map.append(row)
+            map.append(row.copy())
+            # Use .copy otherwise it wont work
 
         return map
         
@@ -35,8 +33,8 @@ def generateMap(x, y, tiles_number):
 
             while len(coords_list) < random_coords_number:
 
-                x_coord = generateRandomNumber(0, (y - 1))
-                y_coord = generateRandomNumber(0, (x - 1))
+                x_coord = random.randint(0, (y - 1))
+                y_coord = random.randint(0, (x - 1))
                 coord = [x_coord, y_coord]
 
                 # Skip duplicates
@@ -54,16 +52,15 @@ def generateMap(x, y, tiles_number):
                 coord_y = coords[i][1]
                 value = values_to_add[i]
 
-                # Přidává všem seznamům proč?
                 map[coord_y][coord_x] = value
             
             return map
 
         random_coords_list = getRandomCoords(x, y, tiles_number)
         blank_map = map
-        set_map = setValues(random_coords_list, blank_map, values)
+        final_map = setValues(random_coords_list, blank_map, values)
 
-        return set_map
+        return final_map
 
 
 
