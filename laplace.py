@@ -2,6 +2,7 @@
 from decimal import DivisionByZero
 import random
 import numpy
+import math
 import json
 
 
@@ -15,7 +16,7 @@ def mean(list):
         output += i
     
     if output > 0:
-        return output / len(list)
+        return math.floor(output / len(list))
     else:
         return "."
 
@@ -120,18 +121,29 @@ def laplaceSteps(map):
     def getValues(empty_value_coords):
         def getCrossValues(coord, map):
             output = []
-            # get coords (top, right, bot, left)
-            coords = [ numpy.add(coord, [-1, 0]), numpy.add(coord, [0, +1]), numpy.add(coord, [+1, 0]), numpy.add(coord, [0, -1])]
+
+            top = numpy.add(coord, [-1, 0])
+            right = numpy.add(coord, [0, +1])
+            bot = numpy.add(coord, [+1, 0])
+            left =  numpy.add(coord, [0, -1])
+            
+            # Skip minus indexes
+            if coord[0] == 0:
+                top = [2000, 2000]
+            if coord[1] == 0:
+                left = [2000, 2000]
+
+            coords = [top, right, bot, left]
             
             # get values
             for count, value in enumerate(coords):
                 coordY = value[0]
                 coordX = value[1]
-                if coordY >= 0 and coordX >= 0:
-                    try:
-                        output.append(map[coordY][coordX])
-                    except IndexError:
-                        output.append("null")
+
+                try:
+                    output.append(map[coordY][coordX])
+                except IndexError:
+                    output.append("null")
 
             return output
 
