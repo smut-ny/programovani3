@@ -1,5 +1,7 @@
 # Global functions
 import random
+import numpy
+from numpy.core.numeric import outer
 
 def prettyPrintVector(vector_data):
     for line in vector_data:
@@ -89,8 +91,6 @@ def generateMap(x, y, tiles_number, blank_character):
 
         return output
 
-
-
     tiles_values = tilesRandomValueGenerator(10, tiles_number)
     blank_map = createBlankMap(x, y, blank_character)
     map_output = setValuesToMap(tiles_values, blank_map, x, y, 5)
@@ -104,11 +104,32 @@ def laplaceSteps(map):
     map_input = map["map"]
     empty_value_coords = map["data"]["empty_value_coords"]
 
-    def step():
-        pass
+    def step(map, empty_value_coords):
+        def getCrossValues(coord, map):
+            output = []
+            # get coords (top, right, bot, left)
+            coords = [ numpy.add(coord, [-1, 0]), numpy.add(coord, [+1, 0]), numpy.add(coord, [+1, 0]), numpy.add(coord, [-1, 0])]
+            
+            # get values
+            for count, value in enumerate(coords):
+                coordY = value[0]
+                coordX = value[1]
 
-    return prettyPrintVector(map_input), empty_value_coords
+                output.append(
+                    map[coordY][coordX]
+                )
 
+            return output
+                
+
+
+            
+            
+            
+
+        return getCrossValues([2,3], map)
+
+    return prettyPrintVector(map_input), step(map_input, empty_value_coords)
 
 
 
