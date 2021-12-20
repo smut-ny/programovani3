@@ -35,7 +35,7 @@ def generateMap(x, y, tiles_number, blank_character):
         return map
         
     def setValuesToMap(values, map, x, y, tiles_number):
-        def getRandomCoords(x, y, random_coords_number):
+        def createRandomCoords(x, y, random_coords_number):
             coords_list = []
 
             while len(coords_list) < random_coords_number:
@@ -63,7 +63,17 @@ def generateMap(x, y, tiles_number, blank_character):
             
             return map
 
-        random_coords_list = getRandomCoords(x, y, tiles_number)
+        def getEmptyValuesCoords(map):
+            coords = []
+            
+            for row in map:
+                for index, value in enumerate(row):
+                    if value == blank_character:
+                        coords.append([map.index(row), index])
+
+            return coords
+
+        random_coords_list = createRandomCoords(x, y, tiles_number)
         blank_map = map
         final_map = setValues(random_coords_list, blank_map, values)
 
@@ -72,7 +82,8 @@ def generateMap(x, y, tiles_number, blank_character):
             "data": {
                 "tile_values": values,
                 "tile_coords": random_coords_list,
-                "info": "Tile coords are zero indexed"
+                "empty_value_coords": getEmptyValuesCoords(map),
+                "info": "Coords are zero indexed"
             }
         }
 
@@ -90,22 +101,18 @@ def generateMap(x, y, tiles_number, blank_character):
 # 2. laplace function
 
 def laplaceSteps(map):
-    map = map["map"]
+    map_input = map["map"]
+    empty_value_coords = map["data"]["empty_value_coords"]
 
-    def getEmptyValuesCoords(map):
-        coords = []
-        
-        for row in map:
-            for index, value in enumerate(row):
-                if value == blank_character:
-                    coords.append([map.index(row), index])
+    def step():
+        pass
 
-        return coords
+    return prettyPrintVector(map_input), empty_value_coords
 
-    empty_values_coords = getEmptyValuesCoords(map)
-    
-    return prettyPrintVector(map), empty_values_coords
 
+
+
+# 3. Init
 laplace_map = generateMap(5, 5, 5, blank_character)
 
 print(laplaceSteps(laplace_map))
