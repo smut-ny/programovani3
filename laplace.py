@@ -1,11 +1,24 @@
 # Global functions
+from decimal import DivisionByZero
 import random
 import numpy
-from numpy.core.numeric import outer
+import json
+
 
 def prettyPrintVector(vector_data):
     for line in vector_data:
         print(*line)
+
+def mean(list):
+    output = 0
+    for i in list:
+        output += i
+    
+    if output > 0:
+        return output / len(list)
+    else:
+        return "."
+
 
 # Global vars
 blank_character = "."
@@ -104,32 +117,54 @@ def laplaceSteps(map):
     map_input = map["map"]
     empty_value_coords = map["data"]["empty_value_coords"]
 
-    def step(map, empty_value_coords):
+    def getValues(empty_value_coords):
         def getCrossValues(coord, map):
             output = []
             # get coords (top, right, bot, left)
-            coords = [ numpy.add(coord, [-1, 0]), numpy.add(coord, [+1, 0]), numpy.add(coord, [+1, 0]), numpy.add(coord, [-1, 0])]
+            coords = [ numpy.add(coord, [-1, 0]), numpy.add(coord, [0, +1]), numpy.add(coord, [+1, 0]), numpy.add(coord, [0, -1])]
             
             # get values
             for count, value in enumerate(coords):
                 coordY = value[0]
                 coordX = value[1]
-
-                output.append(
-                    map[coordY][coordX]
-                )
+                if coordY >= 0 and coordX >= 0:
+                    try:
+                        output.append(map[coordY][coordX])
+                    except IndexError:
+                        output.append("null")
 
             return output
-                
 
+        def getAllCrossValues(empty_value_coords, map):
+            allCrossValues = {}
 
+            for value in empty_value_coords:
+                allCrossValues[str(value)] = getCrossValues(value, map)
             
-            
-            
+            return allCrossValues
 
-        return getCrossValues([2,3], map)
+        return getAllCrossValues(empty_value_coords, map_input)
+        
+    def step(values, map):
+        output_map = map
+        for key, value in values.items():
+            keyList = json.loads(key)
+            coordY = keyList[0]
+            coordX = keyList[1]
+            only_intgrs = [x for x in value if not isinstance(x, str)]
+            mean_output = mean(only_intgrs)
 
-    return prettyPrintVector(map_input), step(map_input, empty_value_coords)
+            output_map[coordY][coordX] = mean_output
+        
+        return output_map
+
+
+    
+    all_crossValues = getValues(empty_value_coords)
+
+
+
+    return prettyPrintVector(map_input), print("\n"), prettyPrintVector(step(all_crossValues, map_input))
 
 
 
