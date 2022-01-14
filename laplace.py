@@ -179,23 +179,5 @@ def laplaceSteps(map):
 
 # 3. Init
 laplace_map = generateMap(5, 5, 5, blank_character)
-# laplace_map = {'map': [['.', 5, '.', '.', '.'], ['.', 7, 8, 7, '.'], ['.', '.', '.', '.', '.'], ['.', '.', '.', 7, '.'], ['.', '.', '.', '.', '.']], 'data': {'tile_values': [7, 8, 7, 5, 7], 'tile_coords': [[1, 1], [2, 1], [3, 1], [1, 0], [3, 3]], 'empty_value_coords': [[0, 0], [0, 2], [0, 3], [0, 4], [1, 0], [1, 4], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [3, 0], [3, 1], [3, 2], [3, 4], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4]], 'info': 'Coords are zero indexed'}}
 print(laplace_map)
 print(laplaceSteps(laplace_map))
-
-
-
-# Problem je zřejmě ve funkci getEmptyValuesCoords, nebot nepočítá indexy, pokud je poslední seznam prázdný nebo tak nějak. Nějakým způsobem se loopuje a začíná od znovu...
-# Problem bude pravděpodobně v tom, že ten list v listu není sám za sebe, ale když jsou dva prázdné listy tak funkce bere automaticky indexové hodnoty toho předchozího    
-
-# . . . . .
-# . . 1 . .
-# 1 . . 10 3
-# . . . . .
-# . . . . 7
-
-# . . 1 . .
-# 1 1 1 5 3
-# 1 1 5 10 3
-# . . . . .
-# . . . 7 7
