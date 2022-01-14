@@ -2,7 +2,6 @@
 from decimal import DivisionByZero
 import random
 import numpy
-import copy
 import math
 import json
 
