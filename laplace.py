@@ -10,6 +10,16 @@ def prettyPrintVector(vector_data):
     for line in vector_data:
         print(*line)
 
+def make_image(data):
+    from matplotlib import pyplot as plt
+    data = numpy.reshape(data, (len(data), len(data)))
+    data[ data == "." ] = 0
+    data = data.astype("float")
+ 
+    plt.imshow(data, interpolation='none')
+    plt.show()
+
+
 def mean(list):
     output = 0
     for i in list:
@@ -191,7 +201,7 @@ def laplaceSteps(map):
                 print(map, prettyPrintVector(map), "\n")
                 return walk(step(values, map))
         else:
-            return map, prettyPrintVector(map)
+            return map, prettyPrintVector(map), make_image(map)
 
 
         
