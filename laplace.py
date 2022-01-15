@@ -1,4 +1,3 @@
-# Global functions
 from decimal import DivisionByZero
 import random
 import numpy
@@ -6,6 +5,7 @@ import math
 import json
 
 
+# Global functions
 def prettyPrintVector(vector_data):
     for line in vector_data:
         print(*line)
@@ -192,22 +192,19 @@ def laplaceSteps(map):
         
         return output_map
 
-    # main recursive function for each step
+    # main recursive function for each step -> delete prints() or prettyPrintVector/make_image if needed
     def walk(map):
         empty_values_coords = getEmptyValuesCoords(map)
-        values = getValues(empty_values_coords, map)
+        all_crossValues = getValues(empty_values_coords, map)
 
         if '.' in my_flatten(map):
                 print(map, prettyPrintVector(map), "\n")
-                return walk(step(values, map))
+                return walk(step(all_crossValues, map))
         else:
             return map, prettyPrintVector(map), make_image(map)
 
 
-        
-
-    all_crossValues = getValues(empty_value_coords, map_input)
-    
+    all_crossValues = getValues(empty_value_coords, map_input)    
     return walk(step(all_crossValues, map_input))
 
 
