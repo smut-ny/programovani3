@@ -20,6 +20,26 @@ def mean(list):
     else:
         return "."
 
+def getEmptyValuesCoords(map):
+    coords = []
+
+    for row_index, row in enumerate(map):
+        for index, value in enumerate(row):
+            if value == blank_character:
+                coords.append([row_index, index])
+
+    return coords
+
+def my_flatten(lists):
+    flatten_list = []
+
+    for i in lists:
+        if type(i) is not list:
+            flatten_list.append(i)
+        else:
+            flatten_list.extend(my_flatten(i))
+
+    return flatten_list
 
 # Global vars
 blank_character = "."
@@ -79,15 +99,6 @@ def generateMap(x, y, tiles_number, blank_character):
             
             return map
 
-        def getEmptyValuesCoords(map):
-            coords = []
-
-            for row_index, row in enumerate(map):
-                for index, value in enumerate(row):
-                    if value == blank_character:
-                        coords.append([row_index, index])
-
-            return coords
 
         random_coords_list = createRandomCoords(x, y, tiles_number)
         blank_map = map
@@ -118,7 +129,7 @@ def laplaceSteps(map):
     map_input = map["map"]
     empty_value_coords = map["data"]["empty_value_coords"]
 
-    def getValues(empty_value_coords):
+    def getValues(empty_value_coords, map_inpt):
         def getCrossValues(coord, map):
             output = []
 
@@ -159,6 +170,7 @@ def laplaceSteps(map):
         
     def step(values, map):
         output_map = map
+
         for key, value in values.items():
             keyList = json.loads(key)
             coordY = keyList[0]
@@ -170,13 +182,26 @@ def laplaceSteps(map):
         
         return output_map
 
-    all_crossValues = getValues(empty_value_coords)
+    # main recursive function for each step
+    def walk(map):
+        empty_values_coords = getEmptyValuesCoords(map)
+        values = getValues(empty_values_coords, map)
+
+        if '.' in my_flatten(map):
+                print(map, prettyPrintVector(map), "\n")
+                return walk(step(values, map))
+        else:
+            return map, prettyPrintVector(map)
+
+
+        
+
+    all_crossValues = getValues(empty_value_coords, map_input)
     
-    return prettyPrintVector(map_input), print("\n"), prettyPrintVector(step(all_crossValues, map_input))
+    return walk(step(all_crossValues, map_input))
 
 
 
 # 3. Init
 laplace_map = generateMap(5, 5, 5, blank_character)
-print(laplace_map)
 print(laplaceSteps(laplace_map))
