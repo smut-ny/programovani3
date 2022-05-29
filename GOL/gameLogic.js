@@ -17,10 +17,11 @@ export default class GameLogic {
     }
 
     render(){
+        deleteAllChildren(this.#CanvasSelector);
         this.map.grid.forEach( row => {
             const RowElement = `<div class='row'></div>`
             createElement(this.#CanvasSelector, RowElement);
-
+            
             row.forEach( cell => {
                 const CellElement = `<div class='cell'>${cell}</div>`;
                 createElement(this.#LastRowSelector, CellElement);
@@ -32,4 +33,8 @@ export default class GameLogic {
 
 function createElement(parentSelector, elementType){
     return document.querySelector(parentSelector).insertAdjacentHTML('beforeend', elementType);
+}
+
+function deleteAllChildren(parentSelector){
+    return document.querySelector(parentSelector).replaceChildren()
 }
