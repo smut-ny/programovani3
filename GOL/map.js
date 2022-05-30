@@ -9,13 +9,26 @@ export default class Map {
             this[key] = value
         })
 
-        this.grid = createGrid(this.dimension, this.cell.filler)
+        this.grid = createGrid(this.dimension, this.cell)
     }
 }
 
-function createGrid(array, filler){
-    let row = new Array(array[0]).fill(filler)
-    let grid = new Array(array[1]).fill(row)
+// TODO DEEP COOPY
+function createGrid(array, cell){
+    let row = []; let grid = [];
+    
+    for (let i = 0; i < array[0]; i++){
+        row.push(new cell);
+    }
+    for (let i = 0; i < array[1]; i++){
+        grid.push(row);
+    }
     
     return grid
+
+
+    // Delete because of referentiality
+    // let row = new Array(array[0]).fill(cell)
+    // let grid = new Array(array[1]).fill(row)
+    // return grid
 }
