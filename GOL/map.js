@@ -15,13 +15,15 @@ export default class Map {
 
 // TODO DEEP COOPY
 function createGrid(array, cell){
-    let row = []; let grid = [];
-    
+    let row = [];
+    let grid = [];
+
     for (let i = 0; i < array[0]; i++){
         row.push(new cell);
     }
+    
     for (let i = 0; i < array[1]; i++){
-        grid.push(row);
+        grid.push(structuredClone(row));
     }
     
     return grid

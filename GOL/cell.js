@@ -1,6 +1,7 @@
 const DEFAULT_OPTIONS = {
     size: 20,
-    filler: 0
+    value: 0,
+    position: []
 }
 
 export default class Cell {

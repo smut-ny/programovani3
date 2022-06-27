@@ -2,8 +2,8 @@ import map from "./map.js"
 import cell from "./cell.js"
 import game from "./game.js"
 
-const Cell = new cell()
-const Map = new map({cell: Cell})
+
+const Map = new map({cell: cell, dimension: [20, 40] })
 const Game = new game({ map: Map })
 
 
