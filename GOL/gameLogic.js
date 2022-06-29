@@ -14,11 +14,17 @@ export default class GameLogic {
     }
 
     startGame(){
+        // Init map
         this.render(this.isRandomSeed, true);
-        this.renderSteps();
+
+        // Steps
+        setInterval(e => {
+            this.renderSteps();
+        }, 2000)
     }
 
     render(randomSeed, init){
+
         deleteAllChildren(this.#CanvasSelector)
 
         this.map.grid.forEach( (row, rowIndex) => {
@@ -28,7 +34,8 @@ export default class GameLogic {
             row.forEach( (cell, cellIndex) => {
                 // Randomize Value on init, and sets position of each cell
                 if (randomSeed && init) cell.value = randomMinMax(0, 1); cell.position = [rowIndex, cellIndex];
-                const CellElement = `<div class='cell'>${cell.value}</div>`;
+            
+                const CellElement = `<div class='cell cell${cell.value}'>${cell.value}</div>`;
                 createElement(this.#LastRowSelector, CellElement);
             })
         })
@@ -43,18 +50,33 @@ export default class GameLogic {
     }
 
     gameOfLifeLogic(cell){
-        if(cell.value == 1 ) this.getCrossValues(cell.position)
-        return cell.value
+        cell.crossValues = this.getCrossDirections(cell.position);
+        let values = [
+            this.getCellValue(cell.position[0], cell.crossValues.top),
+            this.getCellValue(cell.position[0], cell.crossValues.bottom),
+            this.getCellValue(cell.position[1], cell.crossValues.left),
+            this.getCellValue(cell.position[1], cell.crossValues.right),
+        ]
+
+        let aliveCellsAround = values.filter(x => x==1).length == 3;
+            
+        switch (cell.value){
+            case 0:
+                if (aliveCellsAround == 3) return 1
+            case 1:
+                if (aliveCellsAround == 1 || aliveCellsAround == 4) return 0
+            default: return cell.value
+        }
     }
 
     renderSteps(){
         this.changeMapCellValues();
-        this.render(false, false)
+        this.render(false, false);
     }
 
-    getCrossValues(position){
+    getCrossDirections(position){
         // Undefine if position is off the grid
-        function crossValuesValidator(crossValuesObject, map){
+        function crossDirectionsValidator(crossValuesObject, map){
             if(crossValuesObject.top < 0) crossValuesObject.top = undefined;
             if(crossValuesObject.bottom >= map.length) crossValuesObject.bottom = undefined;
             if(crossValuesObject.left < 0) crossValuesObject.left = undefined;
@@ -69,8 +91,13 @@ export default class GameLogic {
             left: position[1] - 1,
             right: position[1] + 1,
         }
-        return crossValuesValidator(crossValues, this.map.grid) 
+        return crossDirectionsValidator(crossValues, this.map.grid) 
     
+    }
+
+    getCellValue(x, y){
+        if(x && y ) 
+        return this.map.grid[x][y].value
     }
 }
 
