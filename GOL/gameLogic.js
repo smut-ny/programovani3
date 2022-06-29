@@ -35,7 +35,10 @@ export default class GameLogic {
                 // Randomize Value on init, and sets position of each cell
                 if (randomSeed && init) cell.value = randomMinMax(0, 1); cell.position = [rowIndex, cellIndex];
             
-                const CellElement = `<div class='cell cell${cell.value}'>${cell.value}</div>`;
+                const CellElement = `
+                <div class='cell cell${cell.value}'>
+                ${cell.value}
+                </div>`;
                 createElement(this.#LastRowSelector, CellElement);
             })
         })
@@ -50,15 +53,19 @@ export default class GameLogic {
     }
 
     gameOfLifeLogic(cell){
-        cell.crossValues = this.getCrossDirections(cell.position);
+        // Saves cross directions to a cell object
+        cell.crossDirections = this.getCrossDirections(cell.position);
+
+        // Array containing cross cells values [0, 1, 0, undefined]
         let values = [
-            this.getCellValue(cell.position[0], cell.crossValues.top),
-            this.getCellValue(cell.position[0], cell.crossValues.bottom),
-            this.getCellValue(cell.position[1], cell.crossValues.left),
-            this.getCellValue(cell.position[1], cell.crossValues.right),
+            this.getCellValue(cell.crossDirections.top, cell.position[1]),
+            this.getCellValue(cell.crossDirections.bottom, cell.position[1]),
+            this.getCellValue(cell.position[0], cell.crossDirections.left),
+            this.getCellValue(cell.position[0], cell.crossDirections.right),
         ]
 
-        let aliveCellsAround = values.filter(x => x==1).length == 3;
+
+        let aliveCellsAround = values.filter(x => x==1).length;
             
         switch (cell.value){
             case 0:
@@ -74,30 +81,33 @@ export default class GameLogic {
         this.render(false, false);
     }
 
-    getCrossDirections(position){
+    getCrossDirections(cellsPosition){
+        // This function gets cell neighbourgs in cross pattern
+        // Validator function prevents position to go behind the grid border (-1 etc)
         // Undefine if position is off the grid
-        function crossDirectionsValidator(crossValuesObject, map){
-            if(crossValuesObject.top < 0) crossValuesObject.top = undefined;
-            if(crossValuesObject.bottom >= map.length) crossValuesObject.bottom = undefined;
-            if(crossValuesObject.left < 0) crossValuesObject.left = undefined;
-            if(crossValuesObject.right >= map[0].length) crossValuesObject.right = undefined;
+        function validator(crossDirectionsObject, map){
+            if(crossDirectionsObject.top < 0) crossDirectionsObject.top = undefined;
+            if(crossDirectionsObject.bottom >= map.length) crossDirectionsObject.bottom = undefined;
+            if(crossDirectionsObject.left < 0) crossDirectionsObject.left = undefined;
+            if(crossDirectionsObject.right >= map[0].length) crossDirectionsObject.right = undefined;
 
-            return crossValuesObject
+            return crossDirectionsObject
         }
 
-        let crossValues = {
-            top: position[0] - 1,
-            bottom: position[0] + 1,
-            left: position[1] - 1,
-            right: position[1] + 1,
+        let crossDirections = {
+            top: cellsPosition[0] - 1,
+            bottom: cellsPosition[0] + 1,
+            left: cellsPosition[1] - 1,
+            right: cellsPosition[1] + 1,
         }
-        return crossDirectionsValidator(crossValues, this.map.grid) 
+        return validator(crossDirections, this.map.grid) 
     
     }
 
     getCellValue(x, y){
-        if(x && y ) 
-        return this.map.grid[x][y].value
+        if(x != undefined && y != undefined) {
+            return this.map.grid[x][y].value
+        }
     }
 }
 
