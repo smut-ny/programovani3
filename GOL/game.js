@@ -12,11 +12,11 @@ export default class Game {
     constructor(options) {
         Object.entries({ ...DEFAULT_OPTIONS, ...options }).forEach(([key, value]) => {
             this[key] = value;
-        })
+        }),
+        this.gameLogic = new GameLogic({ runs: this.runs, map: this.map, speed: this.speed })
     }
 
     start(){
-        const gameLogic = new GameLogic({ runs: this.runs, map: this.map, speed: this.speed })
-        gameLogic.startGame()
+        this.gameLogic.startGame()
     }
 }

@@ -3,8 +3,8 @@ import cell from "./cell.js"
 import game from "./game.js"
 
 
-const Map = new map({cell: cell, dimension: [50, 50] })
-const Game = new game({ map: Map, speed:5000 })
+window.gameMap = new map({cell: cell, dimension: [50, 5] })
+window.Game = new game({ map: gameMap, speed: 100 })
 
 
-Game.start()
+Game.start()    

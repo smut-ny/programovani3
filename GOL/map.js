@@ -27,10 +27,4 @@ function createGrid(array, cell){
     }
     
     return grid
-
-
-    // Delete because of referentiality
-    // let row = new Array(array[0]).fill(cell)
-    // let grid = new Array(array[1]).fill(row)
-    // return grid
 }
