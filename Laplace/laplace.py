@@ -198,6 +198,7 @@ def laplaceSteps(map):
         all_crossValues = getValues(empty_values_coords, map)
 
         if '.' in my_flatten(map):
+                make_image(map)
                 print(map, prettyPrintVector(map), "\n")
                 return walk(step(all_crossValues, map))
         else:
@@ -211,4 +212,4 @@ def laplaceSteps(map):
 
 # 3. Init
 laplace_map = generateMap(5, 5, 5, blank_character)
-print(laplaceSteps(laplace_map))
+laplaceSteps(laplace_map)
