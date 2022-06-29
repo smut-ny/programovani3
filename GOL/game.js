@@ -3,6 +3,7 @@ import GameLogic from "./gameLogic.js"
 
 const DEFAULT_OPTIONS = {
     runs: true,
+    speed: 1000,
     map: { grid: [[]] }
 }
 
@@ -15,7 +16,7 @@ export default class Game {
     }
 
     start(){
-        const gameLogic = new GameLogic({ runs: this.runs, map: this.map })
+        const gameLogic = new GameLogic({ runs: this.runs, map: this.map, speed: this.speed })
         gameLogic.startGame()
     }
 }

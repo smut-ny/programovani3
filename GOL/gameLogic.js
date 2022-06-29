@@ -1,5 +1,5 @@
 const DEFAULT_OPTIONS = {
-    isRandomSeed: true
+    isRandomSeed: true,
 
 }
 
@@ -20,7 +20,7 @@ export default class GameLogic {
         // Steps
         setInterval(e => {
             this.renderSteps();
-        }, 2000)
+        }, this.speed)
     }
 
     render(randomSeed, init){
@@ -57,21 +57,30 @@ export default class GameLogic {
         cell.crossDirections = this.getCrossDirections(cell.position);
 
         // Array containing cross cells values [0, 1, 0, undefined]
+        // Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight
         let values = [
             this.getCellValue(cell.crossDirections.top, cell.position[1]),
             this.getCellValue(cell.crossDirections.bottom, cell.position[1]),
             this.getCellValue(cell.position[0], cell.crossDirections.left),
             this.getCellValue(cell.position[0], cell.crossDirections.right),
+            this.getCellValue(cell.crossDirections.top, cell.crossDirections.left),
+            this.getCellValue(cell.crossDirections.top, cell.crossDirections.right),
+            this.getCellValue(cell.crossDirections.bottom, cell.crossDirections.left),
+            this.getCellValue(cell.crossDirections.bottom, cell.crossDirections.right),
         ]
 
 
         let aliveCellsAround = values.filter(x => x==1).length;
-            
+        
+        // Main logic of dying and living
         switch (cell.value){
+            // For dead
             case 0:
                 if (aliveCellsAround == 3) return 1
+            
+            // For alive
             case 1:
-                if (aliveCellsAround == 1 || aliveCellsAround == 4) return 0
+                if (aliveCellsAround <= 1 || aliveCellsAround >= 4) return 0
             default: return cell.value
         }
     }
@@ -98,14 +107,14 @@ export default class GameLogic {
             top: cellsPosition[0] - 1,
             bottom: cellsPosition[0] + 1,
             left: cellsPosition[1] - 1,
-            right: cellsPosition[1] + 1,
+            right: cellsPosition[1] + 1
         }
         return validator(crossDirections, this.map.grid) 
     
     }
 
     getCellValue(x, y){
-        if(x != undefined && y != undefined) {
+        if((x != undefined) && (y != undefined)) {
             return this.map.grid[x][y].value
         }
     }
