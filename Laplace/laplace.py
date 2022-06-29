@@ -1,5 +1,7 @@
 from decimal import DivisionByZero
 import random
+from re import I
+from select import KQ_FILTER_AIO
 import numpy
 import math
 import json
@@ -12,8 +14,13 @@ def prettyPrintVector(vector_data):
 
 def make_image(data):
     from matplotlib import pyplot as plt
-    data = numpy.reshape(data, (len(data), len(data)))
-    data[ data == "." ] = 0
+    
+    if "." in my_flatten(data):
+        data = numpy.reshape(data, (len(data), len(data)))
+        data[ data == "." ] = 0
+    else:
+        data = numpy.reshape(data, (len(data), len(data)))
+    
     data = data.astype("float")
  
     plt.imshow(data, interpolation='none')
@@ -196,7 +203,6 @@ def laplaceSteps(map):
     def walk(map):
         empty_values_coords = getEmptyValuesCoords(map)
         all_crossValues = getValues(empty_values_coords, map)
-
         if '.' in my_flatten(map):
                 make_image(map)
                 print(map, prettyPrintVector(map), "\n")
